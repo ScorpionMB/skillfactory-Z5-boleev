@@ -1,4 +1,4 @@
-
+localStorage.removeItem('myJSON');
 const useRequest = (page, limit) => {
   
   return fetch(`https://picsum.photos/v2/list?page=${page}&limit=${limit}`)
@@ -37,11 +37,12 @@ function displayResult(apiData) {
 
 // Вешаем обработчик на кнопку для запроса
 btnNode.addEventListener('click', async () => {
-//   const myJSON = localStorage.getItem('myJSON');
+  const myJSON = localStorage.getItem('myJSON');
   
-//   if (myJSON) {
-//     console.log(myJSON)
-//   } else {
+  if (myJSON) {
+    console.log(myJSON)
+    resultNode.innerHTML = displayResult(myJSON);
+  } else {
   const inp1 = Number(document.querySelector('.j-inp-1').value);
   const inp2 = Number(document.querySelector('.j-inp-2').value);
   console.log(inp1, inp2, isNaN(inp1), isNaN(inp2))
@@ -58,10 +59,10 @@ btnNode.addEventListener('click', async () => {
        console.log('start');
        const requestResult = await useRequest(inp1, inp2);
        console.log('requestResult', requestResult);
-       // localStorage.setItem('myJSON', JSON.stringify(requestResult));
+       localStorage.setItem('myJSON', requestResult);
        resultNode.innerHTML = displayResult(requestResult);
        console.log('end');
-  // }
+  }
   }
 });
 
