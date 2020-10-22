@@ -6,8 +6,10 @@
 }
 
 .result {
+  display: flex;
+  flex-wrap: wrap;
   margin-top: 20px;
-  width: 1000px;
+  max-width: 1000px;
 }
 
 .btn {
@@ -45,13 +47,11 @@
 }
 
 .card {
-  display: inline-block;
   width: 200px;
   margin: 20px;
 }
 
 .card-image {
-  display: block;
   width: 200px;
   height: 150px;
 }

@@ -1,11 +1,11 @@
-localStorage.removeItem('myJSON');
+// Запрос на сервер   
 const useRequest = (page, limit) => {
   
   return fetch(`https://picsum.photos/v2/list?page=${page}&limit=${limit}`)
    .then((response) => { 
      return response.json(); })
    .then((data) => { 
-    return data; })
+     return data; })
    .catch(() => { console.log('error') });
 };
 
@@ -13,8 +13,15 @@ const useRequest = (page, limit) => {
 const resultNode = document.querySelector('.j-result');
 // Ищем кнопку, по нажатии на которую будет запрос
 const btnNode = document.querySelector('.j-btn-request');
-   
 
+// Проверяем хранилище и, если есть сохраненные данные, выводим результат
+const myJSON = JSON.parse(localStorage.getItem('myJSON'));
+    if (myJSON) {
+      console.log('myJSON', myJSON)
+      resultNode.innerHTML = displayResult(myJSON);
+    }
+   
+// Функция для форматирования вывода результата
 function displayResult(apiData) {
   let cards = '';
   // console.log('start cards', cards);
@@ -34,18 +41,11 @@ function displayResult(apiData) {
   return cards;
 };
 
-
 // Вешаем обработчик на кнопку для запроса
 btnNode.addEventListener('click', async () => {
-  const myJSON = localStorage.getItem('myJSON');
-  
-  if (myJSON) {
-    console.log(myJSON)
-    resultNode.innerHTML = displayResult(myJSON);
-  } else {
+
   const inp1 = Number(document.querySelector('.j-inp-1').value);
   const inp2 = Number(document.querySelector('.j-inp-2').value);
-  console.log(inp1, inp2, isNaN(inp1), isNaN(inp2))
   if ((inp1 < 1 || inp1 > 10 || isNaN(inp1) == true) && (inp2 < 1 || inp2 > 10 || isNaN(inp2) == true)) {
        resultNode.innerHTML = 'Ошибка! Номер страницы и лимит вне диапазона от 1 до 10'
        console.log('Номер страницы и лимит вне диапазона от 1 до 10')  
@@ -57,12 +57,15 @@ btnNode.addEventListener('click', async () => {
        console.log('Лимит вне диапазона от 1 до 10')
     } else {
        console.log('start');
+      
+      // Выводим результат
        const requestResult = await useRequest(inp1, inp2);
        console.log('requestResult', requestResult);
-       localStorage.setItem('myJSON', requestResult);
        resultNode.innerHTML = displayResult(requestResult);
+      // Записываем результат запроса в хранилище
+       localStorage.setItem('myJSON', JSON.stringify(requestResult));
+
        console.log('end');
-  }
   }
 });
 
